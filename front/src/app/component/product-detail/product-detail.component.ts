@@ -10,32 +10,37 @@ import { ProductService } from 'src/app/services/products.service';
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.css']
 })
-export class ProductDetailComponent implements OnInit{
-  product: Product = new Product();
-  constructor(private productService: ProductService,private route: ActivatedRoute,private cartService: CartService,) { }
+export class ProductDetailComponent implements OnInit {
+  product: Product = new Product(); // Instance de produit initialisée à un nouveau produit vide
+
+  constructor(
+    private productService: ProductService,
+    private route: ActivatedRoute,
+    private cartService: CartService
+  ) {}
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(()=>{
-      this.productdetails();
-    })
+    // Souscrire aux modifications des paramètres d'URL
+    this.route.paramMap.subscribe(() => {
+      this.productdetails(); // Appeler la fonction productdetails à chaque modification
+    });
   }
 
-  productdetails(){
-   
-    const theProductId: number = +this.route.snapshot.paramMap.get('id')!;
+  productdetails() {
+    const theProductId: number = +this.route.snapshot.paramMap.get('id')!; // Récupérer l'identifiant du produit à partir de l'URL
 
     this.productService.getProductById(theProductId).subscribe(
-      data => {
-        this.product = data;
+      (data) => {
+        this.product = data; // Mettre à jour les détails du produit avec les données récupérées du service
       }
-    )
+    );
   }
 
   addToCart() {
+    console.log(`Ajouter au panier: ${this.product.name}, ${this.product.unitePrice}`); // Afficher dans la console le nom et le prix du produit ajouté au panier
 
-    console.log(`Adding to cart: ${this.product.name}, ${this.product.unitePrice}`);
-    const theCartItem = new CartItem(this.product);
-    this.cartService.addToCart(theCartItem);
-    
+    const theCartItem = new CartItem(this.product); // Créer un nouvel élément de panier à partir du produit
+
+    this.cartService.addToCart(theCartItem); // Ajouter l'élément de panier au service de panier
   }
 }

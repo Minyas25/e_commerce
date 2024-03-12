@@ -10,86 +10,61 @@ import { environment } from 'src/environments/environment.development';
 })
 
 export class ProductService {
+  private baseUrl = 'http://127.0.0.1:8000/api/products'; // URL de base pour les produits
+  private categoryUrl ='http://127.0.0.1:8000/api/categories'; // URL de base pour les catégories de produits
 
-  private baseUrl = 'http://127.0.0.1:8000/api/products';
-  private categoryUrl ='http://127.0.0.1:8000/api/categories';
   constructor(private httpClient: HttpClient) { }
 
+  // Récupérer tous les produits
   fetchAll() {
-    return this.httpClient.get<Product[]>(environment.serverUrl+'/api/products')
-    //pfff
-    // .pipe(map(data => data.map(item => ({...item, released:item.released.substring(0,10)}))));
+    return this.httpClient.get<Product[]>(environment.serverUrl+'/api/products');
   }
-  getProductListPagination(thePage: number,thePageSize: number,thencategoryID : number): Observable<GetResponseProducts> {
-    
-      
-      const searchUrl = `${this.baseUrl}?_page=${thePage}&itemsPerPage=${thePageSize}&category=${thencategoryID}`;
-      return this.httpClient.get<GetResponseProducts>(searchUrl);
-  } 
 
-    getProductList(thencategoryID : number): Observable<Product[]> {
-  
-  
-   const searchUrl = (`${this.baseUrl}?category=/api/categories/${thencategoryID}`);
-   
-   return this.httpClient.get<Product[]>(searchUrl);
-   
-  }  
+  // Récupérer une liste paginée de produits en fonction de la catégorie
+  getProductListPagination(thePage: number, thePageSize: number, theCategoryId: number): Observable<GetResponseProducts> {
+    const searchUrl = `${this.baseUrl}?_page=${thePage}&itemsPerPage=${thePageSize}&category=${theCategoryId}`;
+    return this.httpClient.get<GetResponseProducts>(searchUrl);
+  }
 
-  addProduct(product: Product): Observable<Product> {
-
-  const headers = new HttpHeaders({
-
-    'Content-Type': 'application/json'
-
-  });
-
-  return this.httpClient.post<Product>(this.baseUrl, product, { headers });
-
-}
-/*  getProductList(): Observable<Product[]> {
-    
-      return this.httpClient.get<Product[]>(this.baseUrl);
-  }  */
-
-
-  searchProducts(theKeyword: string): Observable<Product[]> {
-
-    
-    const searchUrl = `${this.baseUrl}?name=${theKeyword}`;
-
+  // Récupérer une liste de produits en fonction de la catégorie
+  getProductList(theCategoryId: number): Observable<Product[]> {
+    const searchUrl = `${this.baseUrl}?category=/api/categories/${theCategoryId}`;
     return this.httpClient.get<Product[]>(searchUrl);
   }
 
-  searchProductListPagination(thePage: number,thePageSize: number,theKeyword : string): Observable<GetResponseProducts> {
-   
-    const searchUrl = `${this.baseUrl}/search/findByNameContaining?name=${theKeyword}`+ `&page=${thePage}&size=${thePageSize}`;
-
-   return this.httpClient.get<GetResponseProducts>(searchUrl);
+  // Ajouter un produit
+  addProduct(product: Product): Observable<Product> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    return this.httpClient.post<Product>(this.baseUrl, product, { headers });
   }
 
-  private getProducts(searchUrl: string): Observable<Product[]> {
-    return this.httpClient.get<GetResponseProducts>(searchUrl).pipe(map(response => response.member.products));
+  // Rechercher des produits par mot-clé
+  searchProducts(theKeyword: string): Observable<Product[]> {
+    const searchUrl = `${this.baseUrl}?name=${theKeyword}`;
+    return this.httpClient.get<Product[]>(searchUrl);
   }
 
+  // Rechercher une liste paginée de produits par mot-clé
+  searchProductListPagination(thePage: number, thePageSize: number, theKeyword: string): Observable<GetResponseProducts> {
+    const searchUrl = `${this.baseUrl}/search/findByNameContaining?name=${theKeyword}&page=${thePage}&size=${thePageSize}`;
+    return this.httpClient.get<GetResponseProducts>(searchUrl);
+  }
+
+  // Récupérer un produit par ID
   getProductById(theProductId: number): Observable<Product> {
-
-    
     const productUrl = `${this.baseUrl}/${theProductId}`;
-
     return this.httpClient.get<Product>(productUrl);
   }
 
-
+  // Récupérer les catégories de produits
   getProductCategories(): Observable<ProductCategory[]> {
-    /*  return this.httpClient.get<GetResponseProductCategory>(this.categoryUrl).pipe(
-      map(response => response.member.productCategory)
-      );  */
-       return this.httpClient.get<ProductCategory[]>(this.categoryUrl); 
-    }
-
+    return this.httpClient.get<ProductCategory[]>(this.categoryUrl);
+  }
 }
 
+// Interface pour la réponse des produits
 interface GetResponseProducts {
   member: {
     products: Product[];
@@ -102,6 +77,7 @@ interface GetResponseProducts {
   }
 }
 
+// Interface pour la réponse des catégories de produits
 interface GetResponseProductCategory {
   member: {
     productCategory: ProductCategory[];

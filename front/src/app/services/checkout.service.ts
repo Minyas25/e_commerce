@@ -6,12 +6,12 @@ import { Purchase } from '../Entities/purchase';
   providedIn: 'root'
 })
 export class CheckoutService {
+  private purchaseUrl = 'http://localhost:8080/api/checkout/purchase'; // URL de l'API pour passer une commande
 
-  private purchaseUrl = 'http://localhost:8080/api/checkout/purchase';
-
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) { } // Injection du service HttpClient dans le service CheckoutService
 
   placeOrder(purchase: Purchase): Observable<any> {
-    return this.httpClient.post<Purchase>(this.purchaseUrl, purchase);    
+    // Méthode pour passer une commande en utilisant l'API
+    return this.httpClient.post<Purchase>(this.purchaseUrl, purchase); // Effectue une requête POST vers l'URL d'achat avec les détails de la commande
   }
 }

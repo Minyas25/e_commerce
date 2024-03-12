@@ -5,7 +5,6 @@ import { Country } from 'src/app/Entities/country';
 import { Order } from 'src/app/Entities/order';
 import { OrderItem } from 'src/app/Entities/order-item';
 import { Purchase } from 'src/app/Entities/purchase';
-import { State } from 'src/app/Entities/state';
 import { CartService } from 'src/app/services/cart.service';
 import { CheckoutService } from 'src/app/services/checkout.service';
 import { ShopformService } from 'src/app/services/shopform.service';
@@ -15,25 +14,28 @@ import { ShopformService } from 'src/app/services/shopform.service';
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.css']
 })
-export class OrderComponent implements OnInit{
-  checkoutFormGroup!: FormGroup;
-  totalPrice: number = 0;
-  totalQuantity: number = 0;
+export class OrderComponent implements OnInit {
+  checkoutFormGroup!: FormGroup; // Formulaire de commande
+  totalPrice: number = 0; // Prix total initialisé à 0
+  totalQuantity: number = 0; // Quantité totale initialisée à 0
 
-  creditCardYears: number[] = [];
-  creditCardMonths: number[] = [];
+  creditCardYears: number[] = []; // Années de carte de crédit
+  creditCardMonths: number[] = []; // Mois de carte de crédit
 
-  countries: Country[] = [];
+  countries: Country[] = []; // Liste des pays disponibles
 
-  shippingAddressStates: State[] = [];
-  billingAddressStates: State[] = [];
-
-  constructor(private formBuilder: FormBuilder,private shopFormService: ShopformService,
-    private CartService: CartService,private checkoutService: CheckoutService, private router: Router) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private shopFormService: ShopformService,
+    private CartService: CartService,
+    private checkoutService: CheckoutService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    this.reviewCartDetails();
+    this.reviewCartDetails(); // Afficher les détails du panier
     this.checkoutFormGroup = this.formBuilder.group({
+      // Créer un groupe de formulaire pour les informations de la commande
       customer: this.formBuilder.group({
         firstName: [''],
         lastName: [''],
@@ -63,196 +65,121 @@ export class OrderComponent implements OnInit{
       })
     });
 
-   
+    const startMonth: number = new Date().getMonth() + 1; // Mois de début pour les cartes de crédit
 
-     const startMonth: number = new Date().getMonth() + 1;
-     console.log("startMonth: " + startMonth);
- 
-     this.shopFormService.getCreditCardMonths(startMonth).subscribe(
-       data => {
-         console.log("Retrieved credit card months: " + JSON.stringify(data));
-         this.creditCardMonths = data;
-       }
-     );
- 
-    
- 
-     this.shopFormService.getCreditCardYears().subscribe(
-       data => {
-         console.log("Retrieved credit card years: " + JSON.stringify(data));
-         this.creditCardYears = data;
-       }
-     );
-       
-
-    this.shopFormService.getCountries().subscribe(
+    // Récupérer les mois de carte de crédit disponibles à partir du service
+    this.shopFormService.getCreditCardMonths(startMonth).subscribe(
       data => {
-        console.log("Retrieved countries: " + JSON.stringify(data));
-        this.countries = data;
+        this.creditCardMonths = data; // Mettre à jour la liste des mois de carte de crédit
       }
     );
 
- 
+    // Récupérer les années de carte de crédit disponibles à partir du service
+    this.shopFormService.getCreditCardYears().subscribe(
+      data => {
+        this.creditCardYears = data; // Mettre à jour la liste des années de carte de crédit
+      }
+    );
+
+    // Récupérer la liste des pays disponibles à partir du service
+    this.shopFormService.getCountries().subscribe(
+      data => {
+        this.countries = data; // Mettre à jour la liste des pays disponibles
+      }
+    );
   }
 
-  copyShippingAddressToBillingAddress(event:any) {
-
-    console.log('ok');
-
+  copyShippingAddressToBillingAddress(event: any) {
+    // Copier les informations d'adresse de livraison vers les informations d'adresse de facturation
     if (event.target.checked) {
       this.checkoutFormGroup.get('billingAddress')!.setValue(
-        this.checkoutFormGroup.get('shippingAddress')!.value);
-        
-      this.billingAddressStates = this.shippingAddressStates;
-      
+        this.checkoutFormGroup.get('shippingAddress')!.value
+      );
     } else {
-      this.checkoutFormGroup.get('billingAddress')!.reset();
+      this.checkoutFormGroup.get('billingAddress')!.reset(); // Réinitialiser les informations d'adresse de facturation
     }
   }
 
   onSubmit() {
-    console.log("Handling the submit button");
-
+    // Soumettre la commande
     if (this.checkoutFormGroup.invalid) {
-      this.checkoutFormGroup.markAllAsTouched();
+      this.checkoutFormGroup.markAllAsTouched(); // Marquer tous les champs comme touchés en cas de formulaire invalide
       return;
     }
 
-    
-     let order = new Order();
-     order.totalPrice = this.totalPrice;
-     order.totalQuantity = this.totalQuantity;
- 
-     // get cart items
-     const cartItems = this.CartService.cartItems;
- 
-     // create orderItems from cartItems
-     // - long way
-     /*
-     let orderItems: OrderItem[] = [];
-     for (let i=0; i < cartItems.length; i++) {
-       orderItems[i] = new OrderItem(cartItems[i]);
-     }
-     */
- 
-  
-     let orderItems: OrderItem[] = cartItems.map(tempCartItem => new OrderItem(tempCartItem));
+    // Créer une nouvelle commande avec les détails actuels
+    let order = new Order();
+    order.totalPrice = this.totalPrice;
+    order.totalQuantity = this.totalQuantity;
 
-     let purchase = new Purchase();
+    // Obtenir les éléments du panier
+    const cartItems = this.CartService.cartItems;
 
-     purchase.customer = this.checkoutFormGroup.controls['customer'].value;
-     
-    
-     purchase.shippingAddress = this.checkoutFormGroup.controls['shippingAddress'].value;
-     const shippingState: State = JSON.parse(JSON.stringify(purchase.shippingAddress.state));
-     const shippingCountry: Country = JSON.parse(JSON.stringify(purchase.shippingAddress.country));
-     purchase.shippingAddress.state = shippingState.name;
-     purchase.shippingAddress.country = shippingCountry.name;
- 
-    
-     purchase.billingAddress = this.checkoutFormGroup.controls['billingAddress'].value;
-     const billingState: State = JSON.parse(JSON.stringify(purchase.billingAddress.state));
-     const billingCountry: Country = JSON.parse(JSON.stringify(purchase.billingAddress.country));
-     purchase.billingAddress.state = billingState.name;
-     purchase.billingAddress.country = billingCountry.name;
-   
-   
-     purchase.order = order;
-     purchase.orderItems = orderItems;
- 
+    // Créer des éléments de commande à partir des éléments du panier
+    let orderItems: OrderItem[] = cartItems.map(tempCartItem => new OrderItem(tempCartItem));
 
-     this.checkoutService.placeOrder(purchase).subscribe({
-         next: response => {
-           alert(`Your order has been received.\nOrder tracking number: ${response.orderTrackingNumber}`);
- 
-         
-           this.resetCart();
- 
-         },
-         error: err => {
-           alert(`There was an error: ${err.message}`);
-         }
-       }
-     );
- 
-   }
- 
-   resetCart() {
-    
-     this.CartService.cartItems = [];
-    //  this.CartService.totalPrice$.next(0);
-    //  this.CartService.totalQuantity$.next(0);
+    // Créer une nouvelle commande d'achat avec les informations de la commande
+    let purchase = new Purchase();
+    purchase.customer = this.checkoutFormGroup.controls['customer'].value;
+    purchase.shippingAddress = this.checkoutFormGroup.controls['shippingAddress'].value;
+    purchase.billingAddress = this.checkoutFormGroup.controls['billingAddress'].value;
+    purchase.order = order;
+    purchase.orderItems = orderItems;
 
-     this.checkoutFormGroup.reset();
- 
-  
-     this.router.navigateByUrl("/products");
-   }
+    // Placer la commande en appelant le service de checkout
+    this.checkoutService.placeOrder(purchase).subscribe({
+      next: response => {
+        // Afficher un message d'alerte avec le numéro de suivi de la commande
+        alert(`Your order has been received.\nOrder tracking number: ${response.orderTrackingNumber}`);
+        // Réinitialiser le panier après la commande
+        this.resetCart();
+      },
+      error: err => {
+        // Afficher un message d'erreur en cas d'erreur lors de la commande
+        alert(`There was an error: ${err.message}`);
+      }
+    });
+  }
+
+  resetCart() {
+    // Réinitialiser le panier après la commande
+    this.CartService.cartItems = [];
+    this.checkoutFormGroup.reset(); // Réinitialiser le formulaire de commande
+    this.router.navigateByUrl("/products"); // Rediriger vers la page des produits après la commande
+  }
 
   handleMonthsAndYears() {
-
+    // Gérer les mois et années de carte de crédit
     const creditCardFormGroup = this.checkoutFormGroup.get('creditCard')!;
 
     const currentYear: number = new Date().getFullYear();
     const selectedYear: number = Number(creditCardFormGroup.value.expirationYear);
 
-   
-
     let startMonth: number;
 
+    // Déterminer le mois de début en fonction de l'année sélectionnée
     if (currentYear === selectedYear) {
       startMonth = new Date().getMonth() + 1;
-    }
-    else {
+    } else {
       startMonth = 1;
     }
 
+    // Récupérer les mois de carte de crédit disponibles en fonction du mois de début
     this.shopFormService.getCreditCardMonths(startMonth).subscribe(
       data => {
-        console.log("Retrieved credit card months: " + JSON.stringify(data));
-        this.creditCardMonths = data;
-      }
-    );
-  }
-
-  getStates(formGroupName: string) {
-
-    const formGroup = this.checkoutFormGroup.get(formGroupName)!;
-
-    const countryCode = formGroup.value.country.code;
-    const countryName = formGroup.value.country.name;
-
-    console.log(`${formGroupName} country code: ${countryCode}`);
-    console.log(`${formGroupName} country name: ${countryName}`);
-
-    this.shopFormService.getStates(countryCode).subscribe(
-      data => {
-
-        if (formGroupName === 'shippingAddress') {
-          this.shippingAddressStates = data; 
-        }
-        else {
-          this.billingAddressStates = data;
-        }
-
-     
-        formGroup.get('state')!.setValue(data[0]);
+        this.creditCardMonths = data; // Mettre à jour la liste des mois de carte de crédit
       }
     );
   }
 
   reviewCartDetails() {
-
-   
+    // Examiner les détails du panier
     this.CartService.totalQuantity$.subscribe(
-      totalQuantity => this.totalQuantity = totalQuantity
+      totalQuantity => this.totalQuantity = totalQuantity // Mettre à jour la quantité totale du panier
     );
 
- 
     this.CartService.totalPrice$.subscribe(
-      totalPrice => this.totalPrice = totalPrice
+      totalPrice => this.totalPrice = totalPrice // Mettre à jour le prix total du panier
     );
-
   }
-
 }
