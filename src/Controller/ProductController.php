@@ -18,42 +18,44 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 #[Route('/api')]
 class ProductController extends AbstractController
 {
-
     private $entityManager;
 
-    public function __construct(private ProductsRepository $repo ,EntityManagerInterface $entityManager)
+    public function __construct(private ProductsRepository $repo, EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
     }
 
-    #[Route('/products',methods:'GET')]
+    #[Route('/products', methods: 'GET')]
     public function all(Request $request): JsonResponse
     {
         $page = $request->query->get('page', 1);
         $pageSize = $request->query->get('pageSize', 5);
 
+        // Récupérer tous les produits en fonction de la pagination
         return $this->json($this->repo->findBy([], limit: $pageSize, offset: ($page-1)*$pageSize));
     }
 
     #[Route('/product/{id}', methods: 'GET')]
-    public function one(Products $products) {
+    public function one(Products $products): JsonResponse
+    {
+        // Récupérer un produit par son ID
         return $this->json($products);
     }
 
     #[Route('/products', methods: ['POST'])]
     public function add(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager): JsonResponse
-{
-    try {
-        $products = $serializer->deserialize($request->getContent(), Products::class, 'json');
-    } catch (\Exception $e) {
-        return $this->json('Invalid Body', 400);
-    }
+    {
+        try {
+            // Désérialiser le contenu de la requête JSON en un objet Products
+            $products = $serializer->deserialize($request->getContent(), Products::class, 'json');
+        } catch (\Exception $e) {
+            return $this->json('Invalid Body', 400); // En cas d'erreur de désérialisation, retourner une réponse JSON avec un code 400 (mauvaise requête)
+        }
 
-    $this->entityManager->persist($products);
-    $this->entityManager->persist($products->getCategories());
-    $this->entityManager->flush();
-    return $this->json($products, 201);
-
+        // Persister l'objet Products et ses catégories associées dans la base de données
+        $this->entityManager->persist($products);
+        $this->entityManager->persist($products->getCategories());
+        $this->entityManager->flush(); // Exécuter les opérations SQL pendantes
+        return $this->json($products, 201); // Retourner une réponse JSON avec le produit créé et un code 201 (créé avec succès)
     }
-    
 }
