@@ -1,0 +1,115 @@
+<div class="main-content">
+
+    <div class="section-content section-content-p30">
+
+        <div class="container-fluid">
+
+            <div *ngIf="(cart$ | async)!.length > 0">
+
+                <table class="table table-bordered table-striped table-hover table-sm">
+
+                    <tr>
+
+                        <th width="20%">Image</th>
+
+                        <th width="50%">Detail du produit</th>
+
+                        <th width="30%"></th>
+
+                    </tr>
+
+                    <tr *ngFor="let c of (cart$ | async)">
+
+                        <td>
+
+                            <img src="/assets/img/sac.jpg" class="img-fluid" width="150px" />
+
+                        </td>
+
+                        <td>
+
+                            <p>{{ c.name }}</p>
+
+                            <p>{{ c.unitPrice | currency: '€' }}</p>
+
+                        </td>
+
+                        <td>
+
+                            <div class="items">
+
+                                <label>Quantité:</label>
+
+                                <div class="row no-gutters">
+
+                                    <div class="col">
+
+                                        <button (click)="decrementQuantity(c)" class="btn btn-primary btn-sm">
+
+                                            <i class="bi bi-dash"></i>
+
+                                        </button>
+
+                                    </div>
+
+                                    <div class="col ml-4 mr-2">
+
+                                        {{ c.quantity }}
+
+                                    </div>
+
+                                    <div class="col">
+
+                                        <button (click)="incrementQuantity(c)" class="btn btn-primary btn-sm">
+
+                                            <i class="bi bi-plus"></i>
+
+                                        </button>
+
+                                    </div>
+
+                                    <div class="col-6"><button (click)="remove(c)" class="btn btn-danger btn-sm">Supprimer</button></div>
+
+                                </div>
+
+                            </div>
+
+                            <p class="mt-2">Sous total: {{ c.quantity * c.unitPrice | currency: '€' }}</p>
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td colspan="2"></td>
+
+                        <td style="font-weight: bold">
+
+                            <p>Total Quantité: {{ (totalQuantity$ | async) }}</p>
+
+                            <p> Livraison: Gratuite</p>
+
+                            <p>Prix total: {{ (totalPrice$ | async) | currency: '€' }}</p>
+
+                        </td>
+
+                    </tr>
+
+                </table>
+
+                <a routerLink="/checkout" class="btn btn-primary btn-sm">Valider</a>
+
+            </div>
+
+            <div *ngIf="(cart$ | async)?.length == 0" class="alert alert-warning col-md-12" role="alert">
+
+                Votre panier est vide.
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
