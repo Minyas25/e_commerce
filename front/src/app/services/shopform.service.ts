@@ -8,7 +8,6 @@ import { Country } from '../Entities/country';
 })
 export class ShopformService {
   private countriesUrl = 'http://localhost:8080/api/countries'; // URL de l'API pour les pays
-  private statesUrl = 'http://localhost:8080/api/states'; // URL de l'API pour les états
 
   constructor(private httpClient: HttpClient) { }
 
