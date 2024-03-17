@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Product } from 'src/app/Entities/products';
 import { ProductService } from 'src/app/services/products.service';
 
@@ -7,47 +7,35 @@ import { ProductService } from 'src/app/services/products.service';
   templateUrl: './add-product.component.html',
   styleUrls: ['./add-product.component.css']
 })
-export class AddProductComponent implements OnInit{
+export class AddProductComponent {
 
-  newProduct: Product= new Product();
-constructor(private productService: ProductService) {}
-
-ngOnInit(): void {
-    this.newProduct = {
-      id: '',
-      sku: '',
-      name: '',
-      description: '',
-      unitePrice: 0, 
-      img: '',
-      active: true, 
-      unitsInStock: 0, 
-      dateCreated: new Date(),
-      lastUpdate: new Date()
+  @Input()
+  product: Product = {
+    id:'',
+    sku: '',
+    name: '',
+    description: '',
+    img: '',
+    unitePrice: 0,
+    active: false,
+    unitsInStock: 0,
+    dateCreated: new Date,
+    lastUpdate: new Date
+  
+  };
+  @Output()
+  added = new EventEmitter<Product>();
+  handleImage(event: Event) {
+    const target = event.target as HTMLInputElement;
+    if (target.files) {
+      const reader = new FileReader();
+      reader.readAsDataURL(target.files[0]);
+      reader.onload = () => {
+        this.product.img = reader.result as string; // Assurez-vous que 'img' est la propriété correcte pour l'image
+      };
     }
-}
-onSubmit() {
-
-  this.productService.addProduct(this.newProduct).subscribe({
-
-    next: (response) => {
-
-      console.log('Produit ajouté avec succès', response);
-
-    },
-
-    error:(error) => {
-
-      console.error('Erreur lors de l\'ajout du produit', error);
-
-    }
-
-  });
-
-}
-
-onFileSelect(event: Event): void {
-
-}
-
+  }
+  handleSubmit() {
+    this.added.emit(this.product);
+  }
 }

@@ -69,6 +69,9 @@ export class ProductsComponent implements OnInit {
         this.products = data; // Mettre à jour le tableau de produits avec les produits de la catégorie actuelle
       }
     );
+    // this.products.forEach((product) => {
+    //   product.img='data:image/jpg;base64,' + product.img;
+    // })
   }
 
   addToCart(theProduct: Product) {
