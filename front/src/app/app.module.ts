@@ -11,7 +11,6 @@ import { ProductsComponent } from './component/products/products.component';
 import { SearchComponent } from './component/search/search.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CartStatusComponent } from './component/cart-status/cart-status.component';
 import { HomeComponent } from './component/home/home.component';
 import { CartService } from './services/cart.service';
 import { AddProductComponent } from './component/add-product/add-product.component';
@@ -26,7 +25,6 @@ import { FooterComponent } from './component/footer/footer.component';
     ProductDetailComponent,
     ProductsComponent,
     SearchComponent,
-    CartStatusComponent,
     HomeComponent,
     AddProductComponent,
     FooterComponent,

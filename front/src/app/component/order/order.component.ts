@@ -44,14 +44,12 @@ export class OrderComponent implements OnInit {
       shippingAddress: this.formBuilder.group({
         street: [''],
         city: [''],
-        state: [''],
         country: [''],
         zipCode: ['']
       }),
       billingAddress: this.formBuilder.group({
         street: [''],
         city: [''],
-        state: [''],
         country: [''],
         zipCode: ['']
       }),
