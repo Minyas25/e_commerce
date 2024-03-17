@@ -1,3 +1,56 @@
 div.card{
     margin-top: 200px;
 }
+
+.card {
+    transition: transform 0.3s ease-in-out;
+   }
+   .card:hover {
+    transform: scale(1.1);
+   }
+.container {
+    margin-top: 30px;
+}
+.pagination a.page-link {
+
+  color: #0056b3; /* Couleur du texte */
+
+  background-color: #ffffff; /* Couleur de fond */
+
+  border: 1px solid #dee2e6; /* Couleur de la bordure */
+
+}
+
+.pagination a.page-link:hover {
+
+  color: #ffffff; /* Couleur du texte au survol */
+
+  background-color: #007bff; /* Couleur de fond au survol */
+
+  border-color: #0056b3; /* Couleur de la bordure au survol */
+
+}
+
+.pagination a.page-link {
+
+  transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+
+}
+
+.pagination a.page-link {
+
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+}
+
+.pagination a.page-link:hover {
+
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+}
+
+.pagination a.page-link {
+
+  border-radius: 0.25rem; /* Rayon des coins */
+
+}

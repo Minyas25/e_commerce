@@ -1,72 +1,50 @@
-<form enctype="multipart/form-data" class="needs-validation" novalidate (ngSubmit)="onSubmit()">
+<form (ngSubmit)="handleSubmit()">
 
-  <div class="mb-3">
+  <div class="form-group">
 
-    <label for="productName" class="form-label">Nom du produit</label>
+    <label for="productSKU">SKU</label>
 
-    <input type="text" class="form-control" id="productName" required [(ngModel)]="newProduct.name" name="name">
-
-    <div class="invalid-feedback">
-
-      Veuillez entrer un nom de produit.
-
-    </div>
+    <input type="text" class="form-control" id="productSKU" [(ngModel)]="product.sku" name="sku" placeholder="Entrez le SKU du produit" required>
 
   </div>
 
-  <div class="mb-3">
+  <div class="form-group">
 
-    <label for="productDescription" class="form-label">Description</label>
+    <label for="productName">Nom du produit</label>
 
-    <textarea class="form-control" id="productDescription" required [(ngModel)]="newProduct.description" name="description"></textarea>
-
-    <div class="invalid-feedback">
-
-      Veuillez entrer une description du produit.
-
-    </div>
+    <input type="text" class="form-control" id="productName" [(ngModel)]="product.name" name="name" placeholder="Entrez le nom du produit" required>
 
   </div>
 
-  <div class="mb-3">
+  <div class="form-group">
 
-    <label for="productPrice" class="form-label">Prix unitaire</label>
+    <label for="productDescription">Description</label>
 
-    <input type="number" class="form-control" id="productPrice" required [(ngModel)]="newProduct.unitePrice" name="unitePrice">
-
-    <div class="invalid-feedback">
-
-      Veuillez entrer un prix.
-
-    </div>
+    <textarea class="form-control" id="productDescription" [(ngModel)]="product.description" name="description" rows="3" required></textarea>
 
   </div>
 
-  <div class="mb-3">
+  <div class="form-group">
 
-    <label for="productStock" class="form-label">Quantité en stock</label>
+    <label for="productPrice">Prix unitaire</label>
 
-    <input type="number" class="form-control" id="productStock" required [(ngModel)]="newProduct.unitsInStock" name="unitsInStock">
-
-    <div class="invalid-feedback">
-
-      Veuillez entrer la quantité en stock.
-
-    </div>
+    <input type="number" class="form-control" id="productPrice" [(ngModel)]="product.unitePrice" name="unitePrice" placeholder="Prix" required>
 
   </div>
 
-  <div class="mb-3">
+  <div class="form-group">
 
-    <label for="productImage" class="form-label">Image du produit</label>
+    <label for="productStock">Quantité en stock</label>
 
-    <input type="file" class="form-control" id="productImage" required (change)="onFileSelect($event)" name="img">
+    <input type="number" class="form-control" id="productStock" [(ngModel)]="product.unitsInStock" name="unitsInStock" placeholder="Quantité en stock" required>
 
-    <div class="invalid-feedback">
+  </div>
 
-      Veuillez télécharger une image du produit.
+  <div class="form-group">
 
-    </div>
+    <label for="productImage">Image du produit</label>
+
+    <input type="file" class="form-control-file" id="productImage" (change)="handleImage($event)" required>
 
   </div>
 

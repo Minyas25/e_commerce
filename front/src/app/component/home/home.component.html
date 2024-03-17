@@ -1,0 +1,262 @@
+<div class="container">
+
+    <div class="row">
+  
+      <!-- Colonne pour les filtres -->
+  
+      <div class="col-12 d-flex justify-content-end align-items-center">
+  
+        <!-- Barre déroulante pour les plus populaires -->
+  
+        <div style="width:auto">
+          <select class="form-select" id="popularFilter" style="width:auto">
+  
+            <option value="most_popular">Plus populaires</option>
+  
+            <option value="least_popular">Moins populaires</option>
+  
+            <!-- Ajoutez d'autres options de tri si nécessaire -->
+  
+          </select>
+  
+        </div>
+  
+        <!-- Bouton Filtrer -->
+  
+        <button type="button" class="btn btn-primary ms-2" style="width:auto">Filtrer</button>
+  
+      </div>
+  
+    </div>
+  
+  </div>
+  <div class="container">
+  
+    <div class="row">
+  
+      <div class="col-md-4" *ngFor="let product of products">
+  
+        <div class="card mb-4" routerLinkActive="active">
+  
+          <img src="/assets/img/sac.jpg" class="card-img-top" alt="Produit 1">
+  
+          <div class="card-body">
+  
+            <h5 class="card-title">{{ product.name }}</h5>
+  
+            <p class="card-text">{{ product.description }}</p>
+  
+            <p class="card-text"><strong>Prix : {{ product.unitePrice }} €</strong></p>
+  
+            <a routerLink="/cart-detail" class="btn btn-primary" (click)="addToCart(product)">Acheter</a>
+  
+          </div>
+  
+        </div>
+  
+      </div>
+  
+      <div class="col-md-4">
+  
+        <div class="card mb-4">
+  
+          <img src="/assets/img/sac2.jpg" class="card-img-top" alt="Produit 2">
+  
+          <div class="card-body">
+  
+            <h5 class="card-title">Produit 2</h5>
+  
+            <p class="card-text">Description du produit 2</p>
+  
+            <p class="card-text"><strong>Prix : 20 €</strong></p>
+  
+            <a href="#" class="btn btn-primary">Acheter</a>
+  
+          </div>
+  
+        </div>
+  
+      </div>
+  
+      <div class="col-md-4">
+  
+        <div class="card mb-4">
+  
+          <img src="/assets/img/sac3.jpg" class="card-img-top" alt="Produit 3">
+  
+          <div class="card-body">
+  
+            <h5 class="card-title">Produit 3</h5>
+  
+            <p class="card-text">Description du produit 3</p>
+  
+            <p class="card-text"><strong>Prix : 30 €</strong></p>
+  
+            <a href="#" class="btn btn-primary">Acheter</a>
+  
+          </div>
+  
+        </div>
+  
+      </div>
+  
+    </div>
+  
+  </div>
+  <div class="container">
+  
+    <div class="row">
+  
+      <div class="col-md-4" *ngFor="let product of products">
+  
+        <div class="card mb-4" routerLinkActive="active">
+  
+          <img src="/assets/img/sac.jpg" class="card-img-top" alt="Produit 1">
+  
+          <div class="card-body">
+  
+            <h5 class="card-title">{{ product.name }}</h5>
+  
+            <p class="card-text">{{ product.description }}</p>
+  
+            <p class="card-text"><strong>Prix : {{ product.unitePrice }} €</strong></p>
+  
+            <a routerLink="/cart-detail" class="btn btn-primary" (click)="addToCart(product)">Acheter</a>
+  
+          </div>
+  
+        </div>
+  
+      </div>
+  
+      <div class="col-md-4">
+  
+        <div class="card mb-4">
+  
+          <img src="/assets/img/sac2.jpg" class="card-img-top" alt="Produit 2">
+  
+          <div class="card-body">
+  
+            <h5 class="card-title">Produit 2</h5>
+  
+            <p class="card-text">Description du produit 2</p>
+  
+            <p class="card-text"><strong>Prix : 20 €</strong></p>
+  
+            <a href="#" class="btn btn-primary">Acheter</a>
+  
+          </div>
+  
+        </div>
+  
+      </div>
+  
+      <div class="col-md-4">
+  
+        <div class="card mb-4">
+  
+          <img src="/assets/img/sac3.jpg" class="card-img-top" alt="Produit 3">
+  
+          <div class="card-body">
+  
+            <h5 class="card-title">Produit 3</h5>
+  
+            <p class="card-text">Description du produit 3</p>
+  
+            <p class="card-text"><strong>Prix : 30 €</strong></p>
+  
+            <a href="#" class="btn btn-primary">Acheter</a>
+  
+          </div>
+  
+        </div>
+  
+      </div>
+      <div class="container">
+  
+        <div class="row">
+      
+          <div class="col-md-4" *ngFor="let product of products">
+      
+            <div class="card mb-4" routerLinkActive="active">
+      
+              <img src="/assets/img/sac.jpg" class="card-img-top" alt="Produit 1">
+      
+              <div class="card-body">
+      
+                <h5 class="card-title">{{ product.name }}</h5>
+      
+                <p class="card-text">{{ product.description }}</p>
+      
+                <p class="card-text"><strong>Prix : {{ product.unitePrice }} €</strong></p>
+      
+                <a routerLink="/cart-detail" class="btn btn-primary" (click)="addToCart(product)">Acheter</a>
+      
+              </div>
+      
+            </div>
+      
+          </div>
+      
+          <div class="col-md-4">
+      
+            <div class="card mb-4">
+      
+              <img src="/assets/img/sac2.jpg" class="card-img-top" alt="Produit 2">
+      
+              <div class="card-body">
+      
+                <h5 class="card-title">Produit 2</h5>
+      
+                <p class="card-text">Description du produit 2</p>
+      
+                <p class="card-text"><strong>Prix : 20 €</strong></p>
+      
+                <a href="#" class="btn btn-primary">Acheter</a>
+      
+              </div>
+      
+            </div>
+      
+          </div>
+      
+          <div class="col-md-4">
+      
+            <div class="card mb-4">
+      
+              <img src="/assets/img/sac3.jpg" class="card-img-top" alt="Produit 3">
+      
+              <div class="card-body">
+      
+                <h5 class="card-title">Produit 3</h5>
+      
+                <p class="card-text">Description du produit 3</p>
+      
+                <p class="card-text"><strong>Prix : 30 €</strong></p>
+      
+                <a href="#" class="btn btn-primary">Acheter</a>
+      
+              </div>
+      
+            </div>
+      
+          </div>
+      
+  <nav aria-label="Page navigation example">
+  
+    <ul class="pagination justify-content-center">
+  
+      <li class="page-item"><a class="page-link" href="#">Précédent</a></li>
+  
+      <li class="page-item"><a class="page-link" href="#">1</a></li>
+  
+      <li class="page-item"><a class="page-link" href="#">2</a></li>
+  
+      <li class="page-item"><a class="page-link" href="#">3</a></li>
+  
+      <li class="page-item"><a class="page-link" href="#">Suivant</a></li>
+  
+    </ul>
+  
+  </nav>
+  
