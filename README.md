@@ -25,11 +25,7 @@ composer install
 
 npm install
 
-\`\`\`
-
 ## Utilisation
-
-\`\`\`bash
 
 # Pour Symfony
 
@@ -38,5 +34,3 @@ symfony server:start
 # Pour Angular
 
 npm start
-
-\`\`\`
